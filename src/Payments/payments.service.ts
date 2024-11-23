@@ -8,7 +8,7 @@ export class PaymentsService {
 
   constructor(private readonly configService: ConfigService) {
     this.stripe = new Stripe(this.configService.get<string>('STRIPE_API_KEY'), {
-      apiVersion: '2022-11-15',
+      apiVersion: '2024-11-20.acacia',
     });
   }
 
