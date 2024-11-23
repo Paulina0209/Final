@@ -17,14 +17,14 @@ export class PaymentsService {
 
     try {
       const paymentIntent = await this.stripe.paymentIntents.create({
-        amount,    // Monto en centavos o la unidad menor
-        currency,  // Moneda como 'usd' o 'eur'
+        amount, // Monto en centavos o la unidad menor
+        currency, // Moneda como 'usd' o 'eur'
       });
 
       return {
         clientSecret: paymentIntent.client_secret, // Token para el frontend
-        id: paymentIntent.id,                     // ID del intento de pago
-        status: paymentIntent.status,             // Estado del intento de pago
+        id: paymentIntent.id, // ID del intento de pago
+        status: paymentIntent.status, // Estado del intento de pago
       };
     } catch (error) {
       throw new Error(`Failed to create payment intent: ${error.message}`);

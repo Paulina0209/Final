@@ -1,41 +1,33 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
-  private users = []; // Simulación de base de datos
+  constructor(
+    @InjectRepository(User) 
+    private readonly userRepository: Repository<User>,
+  ) {}
 
   findAll() {
-    return this.users;
+    return this.userRepository.find(); 
   }
 
-  findOne(id: string) {
-    const user = this.users.find(u => u.id === id);
-    if (!user) {
-      throw new Error('User not found');
-    }
-    return user;
+  findById(id: number) {
+    return this.userRepository.findOne({ where: { id } }); 
   }
 
   create(createUserDto: any) {
-    const user = { id: Date.now().toString(), ...createUserDto };
-    this.users.push(user);
-    return user;
+    const user = this.userRepository.create(createUserDto); 
+    return this.userRepository.save(user); 
   }
 
-  update(id: string, updateUserDto: any) {
-    const index = this.users.findIndex(u => u.id === id);
-    if (index === -1) {
-      throw new Error('User not found');
-    }
-    this.users[index] = { ...this.users[index], ...updateUserDto };
-    return this.users[index];
+  update(id: number, updateUserDto: any) {
+    return this.userRepository.update(id, updateUserDto); 
   }
 
-  delete(id: string) {
-    const index = this.users.findIndex(u => u.id === id);
-    if (index === -1) {
-      throw new Error('User not found');
-    }
-    return this.users.splice(index, 1);
+  delete(id: number) {
+    return this.userRepository.delete(id); 
   }
 }
